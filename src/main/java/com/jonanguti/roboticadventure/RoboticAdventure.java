@@ -1,5 +1,6 @@
 package com.jonanguti.roboticadventure;
 
+import com.jonanguti.roboticadventure.configuration.ConfigurationHandler;
 import com.jonanguti.roboticadventure.proxy.IProxy;
 import com.jonanguti.roboticadventure.reference.Reference;
 import cpw.mods.fml.common.Mod;
@@ -14,11 +15,13 @@ public class RoboticAdventure {
     @Mod.Instance (Reference.MOD_ID)
     public static RoboticAdventure instance;
 
-    @SidedProxy(clientSide = "com.jonanguti.roboticadventure.proxy.ClientProxy" ,serverSide = "com.jonanguti.roboticadventure.proxy.ServerProxy")
+    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS ,serverSide = Reference.SERVER_PROXY_CLASS)
     public  static IProxy proxy;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
+
+        ConfigurationHandler.init(event.getSuggestedConfigurationFile() );
 
     }
     @Mod.EventHandler
