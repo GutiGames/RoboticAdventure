@@ -1,8 +1,10 @@
 package com.jonanguti.roboticadventure;
 
 import com.jonanguti.roboticadventure.configuration.ConfigurationHandler;
+import com.jonanguti.roboticadventure.init.ModItems;
 import com.jonanguti.roboticadventure.proxy.IProxy;
 import com.jonanguti.roboticadventure.reference.Reference;
+import com.jonanguti.roboticadventure.utitlity.LogHelper;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -21,15 +23,24 @@ public class RoboticAdventure {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
 
-        ConfigurationHandler.init(event.getSuggestedConfigurationFile() );
+        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+
+        ModItems.init();
+
+        LogHelper.info("Items Inizialised");
+        LogHelper.info("PreInitialization Complete");
 
     }
     @Mod.EventHandler
     public void init(FMLInitializationEvent event){
 
+        LogHelper.info("Inizialization Complete");
+
     }
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event){
+
+        LogHelper.info("Post Inizialization Complete");
 
     }
 }
