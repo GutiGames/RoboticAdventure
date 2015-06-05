@@ -1,3 +1,5 @@
 item.roboticadventure:cloneCard.name=Carta de Clonar
 
+tile.roboticadventure:cloner.name=Clonador
+
 itemGroup.RoboticAdventure=Aventura Robotica
