@@ -7,7 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class CraftingHandler {
+public class CCRecipeHandler {
 
     @SubscribeEvent
     public void onCrafting(ItemCraftedEvent event) {
@@ -17,16 +17,19 @@ public class CraftingHandler {
 
             ItemStack item0 = event.craftMatrix.getStackInSlot(i);
 
-                if (item0 != null && item0.getItem() == ModItems.cloneCard) {
-                    ItemStack k = new ItemStack(ModItems.cloneCard, 2, (item0.getItemDamage()) + 1);
+            if (item0 != null && item0.getItem() == ModItems.cloneCard) {
 
-                    if (k.getItemDamage() >= k.getMaxDamage()) {
-                        k.stackSize--;
-                    }
 
-                    event.craftMatrix.setInventorySlotContents(i, k);
+                ItemStack k = new ItemStack(ModItems.cloneCard, 2, (item0.getItemDamage()) + 32);
+
+                if (k.getItemDamage() >= k.getMaxDamage()) {
+                    k.stackSize--;
                 }
 
-        }}
+                event.craftMatrix.setInventorySlotContents(i, k);
+            }
+
+        }
     }
+}
 

@@ -1,7 +1,8 @@
 package com.jonanguti.roboticadventure;
 
-import com.jonanguti.roboticadventure.configuration.ConfigurationHandler;
-import com.jonanguti.roboticadventure.handler.CraftingHandler;
+import com.jonanguti.roboticadventure.CloneCardRecipes.CCRecipes;
+import com.jonanguti.roboticadventure.handler.CCRecipeHandler;
+import com.jonanguti.roboticadventure.init.ModBlocks;
 import com.jonanguti.roboticadventure.init.ModItems;
 import com.jonanguti.roboticadventure.init.Recipes;
 import com.jonanguti.roboticadventure.proxy.IProxy;
@@ -26,21 +27,28 @@ public class RoboticAdventure {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
 
-        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
         ModItems.init();
-
         LogHelper.info("Items Inizialised");
+
+        ModBlocks.init();
+        LogHelper.info("Blocks Inizialised");
+
+
         LogHelper.info("PreInitialization Complete");
 
     }
     @Mod.EventHandler
     public void init(FMLInitializationEvent event){
 
-        FMLCommonHandler.instance().bus().register(new CraftingHandler());
+        //FMLCommonHandler.instance().bus().register(new CraftingHandler());
+        FMLCommonHandler.instance().bus().register(new CCRecipeHandler());
 
         Recipes.init();
         LogHelper.info("Recipes loaded");
+
+        CCRecipes.init();
+        LogHelper.info("CCRecipes loaded");
 
         LogHelper.info("Inizialization Complete");
 
