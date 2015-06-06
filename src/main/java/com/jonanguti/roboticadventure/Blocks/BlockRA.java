@@ -1,6 +1,5 @@
 package com.jonanguti.roboticadventure.Blocks;
 
-import com.jonanguti.roboticadventure.creativetab.CreativeTabRA;
 import com.jonanguti.roboticadventure.reference.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,7 +12,6 @@ public class BlockRA extends Block {
     public BlockRA(Material material){
 
         super(material);
-        this.setCreativeTab(CreativeTabRA.RA_TAB);
 
     }
 
