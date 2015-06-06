@@ -2,8 +2,10 @@ package com.jonanguti.roboticadventure;
 
 import com.jonanguti.roboticadventure.CloneCardRecipes.CCRecipes;
 import com.jonanguti.roboticadventure.handler.CCRecipeHandler;
+import com.jonanguti.roboticadventure.handler.GuiHandler;
 import com.jonanguti.roboticadventure.init.ModBlocks;
 import com.jonanguti.roboticadventure.init.ModItems;
+import com.jonanguti.roboticadventure.init.ModTileEntities;
 import com.jonanguti.roboticadventure.init.Recipes;
 import com.jonanguti.roboticadventure.proxy.IProxy;
 import com.jonanguti.roboticadventure.reference.Reference;
@@ -14,6 +16,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 public class RoboticAdventure {
@@ -29,10 +32,10 @@ public class RoboticAdventure {
 
 
         ModItems.init();
-        LogHelper.info("Items Inizialised");
+        LogHelper.info("Items Initialised");
 
         ModBlocks.init();
-        LogHelper.info("Blocks Inizialised");
+        LogHelper.info("Blocks Initialised");
 
 
         LogHelper.info("PreInitialization Complete");
@@ -43,6 +46,7 @@ public class RoboticAdventure {
 
         //FMLCommonHandler.instance().bus().register(new CraftingHandler());
         FMLCommonHandler.instance().bus().register(new CCRecipeHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
         Recipes.init();
         LogHelper.info("Recipes loaded");
@@ -50,13 +54,16 @@ public class RoboticAdventure {
         CCRecipes.init();
         LogHelper.info("CCRecipes loaded");
 
-        LogHelper.info("Inizialization Complete");
+        ModTileEntities.init();
+        LogHelper.info("Tiles initialized");
+
+        LogHelper.info("Initialization Complete");
 
     }
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event){
 
-        LogHelper.info("Post Inizialization Complete");
+        LogHelper.info("Post Initialization Complete");
 
     }
 }

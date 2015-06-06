@@ -10,8 +10,9 @@ import net.minecraft.init.Blocks;
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
 public class ModBlocks extends Blocks{
 
-    public static BlockRA duplicatorIdle = new BlockDuplicator(false);
-    public static BlockRA duplicatorActive = new BlockDuplicator(true);
+    public static BlockDuplicator duplicatorIdle = new BlockDuplicator(false);
+    public static BlockDuplicator duplicatorActive = new BlockDuplicator(true);
+    public static final int guiIDDuplicator = 0;
 
 
     public static void init(){

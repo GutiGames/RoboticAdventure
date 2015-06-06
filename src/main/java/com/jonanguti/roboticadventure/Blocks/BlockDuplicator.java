@@ -1,20 +1,27 @@
 package com.jonanguti.roboticadventure.Blocks;
 
+import com.jonanguti.roboticadventure.RoboticAdventure;
 import com.jonanguti.roboticadventure.creativetab.CreativeTabRA;
 import com.jonanguti.roboticadventure.init.ModBlocks;
 import com.jonanguti.roboticadventure.reference.Reference;
+import com.jonanguti.roboticadventure.tileEntity.TileEntityDuplicator;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockDuplicator extends ContainerRA {
+public class BlockDuplicator extends BlockContainer {
 
     private final boolean isActive;
 
@@ -24,10 +31,12 @@ public class BlockDuplicator extends ContainerRA {
     @SideOnly(Side.CLIENT)
     private IIcon iconTop;
 
+    private static boolean keepInventory;
+
 
     public BlockDuplicator(boolean isActive) {
 
-        super();
+        super(Material.iron);
         this.setHardness(1.5F);
         this.setResistance(10.0F);
         this.setStepSound(soundTypeMetal);
@@ -55,7 +64,7 @@ public class BlockDuplicator extends ContainerRA {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon (int side, int metadata){
 
-        return side == 3 ? this.iconFront : side == 1 ?  this.iconTop : (side == 0 ? this.iconTop : side != metadata ? this.blockIcon : this.iconFront);
+        return side == 1 ? this.iconTop : (side == 0 ? this.iconTop : (side !=metadata ? this.blockIcon : this.iconFront));
     }
 
     public Item getItemDropped(World world, int x, int y, int z ){
@@ -102,7 +111,26 @@ public class BlockDuplicator extends ContainerRA {
 
     }
 
-   public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemStack){
+    public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ){
+
+        if (!world.isRemote){
+            FMLNetworkHandler.openGui(player, RoboticAdventure.instance, ModBlocks.guiIDDuplicator, world, x, y, z);
+        }
+        return true;
+
+    }
+
+
+
+    @Override
+    public TileEntity createNewTileEntity(World world, int i) {
+        return new TileEntityDuplicator();
+    }
+
+
+
+
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemStack){
 
        int l = MathHelper.floor_double((double)(entityPlayer.rotationYaw * 4.0F / 360.F) + 0.5D ) & 3;
 
@@ -123,9 +151,33 @@ public class BlockDuplicator extends ContainerRA {
        }
 
        if(itemStack.hasDisplayName()) {
-           //((TileEntityDuplicator)world.getTileEntity(x, y, z)).setGuiDisplayName(itemStack.getDisplayName());
+           ((TileEntityDuplicator)world.getTileEntity(x, y, z)).setGuiDisplayName(itemStack.getDisplayName());
        }
    }
+
+    public static void updateDuplicatorBlockState(boolean active, World worldObj, int xCoord, int yCoord, int zCoord) {
+
+        int i = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+
+        TileEntity tileentity = worldObj.getTileEntity(xCoord, yCoord, zCoord);
+        keepInventory = true;
+
+        if (active){
+            worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.duplicatorActive);
+        }
+        else{
+            worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.duplicatorIdle);
+
+        }
+
+        keepInventory = false;
+        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, i, 2);
+
+        if(tileentity != null){
+            tileentity.validate();
+            worldObj.setTileEntity(xCoord, yCoord, zCoord, tileentity);
+        }
+    }
 }
 
 
