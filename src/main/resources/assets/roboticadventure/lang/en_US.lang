@@ -1,5 +1,7 @@
 item.roboticadventure:cloneCard.name=Clone Card
 
-tile.roboticadventure:duplicatorIdle.name=Duplicator
+tile.duplicatorIdle.name=Duplicator
 
-itemGroup.RoboticAdventure=Robotic Adventure
+itemGroup.RoboticAdventure=Robotic Adventure;
+
+container.duplicator=Duplicator

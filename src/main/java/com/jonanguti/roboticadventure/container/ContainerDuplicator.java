@@ -27,13 +27,13 @@ public class ContainerDuplicator extends Container {
         this.addSlotToContainer(new Slot(tileentity, 1, 8, 62));
         this.addSlotToContainer(new SlotFurnace(inventory.player, tileentity, 2, 116, 35));
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 9; j++) {
-                this.addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 94 + i * 18));
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 9; j++) {
+                this.addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
-
         }
-        for (int i = 0; i < 9; i++) {
+
+        for(int i = 0; i < 9; i++) {
             this.addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 142));
         }
 
@@ -46,23 +46,24 @@ public class ContainerDuplicator extends Container {
         icrafting.sendProgressBarUpdate(this, 2, this.duplicator.currentItemBurntime);
     }
 
-    public void detectAndSendChanges(){
+    public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (int i = 0; i < this.crafters.size(); i++){
-            ICrafting icrafting = (ICrafting)this.crafters.get(i);
+        for(int i = 0; i < this.crafters.size(); i++) {
+            ICrafting icrafting = (ICrafting) this.crafters.get(i);
 
-            if (this.lastCooktime != this.duplicator.cooktime){
+            if(this.lastCooktime != this.duplicator.cooktime) {
                 icrafting.sendProgressBarUpdate(this, 0, this.duplicator.cooktime);
             }
 
-            if (this.lastBurntime != this.duplicator.burntime){
+            if(this.lastBurntime != this.duplicator.burntime) {
                 icrafting.sendProgressBarUpdate(this, 1, this.duplicator.burntime);
             }
 
-            if (this.lastCurrentItemBurntime != this.duplicator.currentItemBurntime){
+            if(this.lastBurntime != this.duplicator.currentItemBurntime) {
                 icrafting.sendProgressBarUpdate(this, 2, this.duplicator.currentItemBurntime);
             }
         }
+
         this.lastCooktime = this.duplicator.cooktime;
         this.lastBurntime = this.duplicator.burntime;
         this.lastCurrentItemBurntime = this.duplicator.currentItemBurntime;
@@ -71,10 +72,19 @@ public class ContainerDuplicator extends Container {
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2)
     {
+        if (par1 == 0) {
+            this.duplicator.cooktime = par2;
+        }
+
+        if (par1 == 1) {
+            this.duplicator.burntime = par2;
+        }
+
+        if (par1 == 2) {
+            this.duplicator.currentItemBurntime = par2;
+        }
 
     }
-
-
 
 
     @Override

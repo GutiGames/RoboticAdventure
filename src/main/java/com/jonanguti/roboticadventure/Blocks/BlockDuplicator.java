@@ -21,6 +21,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class BlockDuplicator extends BlockContainer {
 
     private final boolean isActive;
@@ -37,9 +39,6 @@ public class BlockDuplicator extends BlockContainer {
     public BlockDuplicator(boolean isActive) {
 
         super(Material.iron);
-        this.setHardness(1.5F);
-        this.setResistance(10.0F);
-        this.setStepSound(soundTypeMetal);
         this.isActive = isActive;
 
         if (isActive){
@@ -62,26 +61,24 @@ public class BlockDuplicator extends BlockContainer {
     }
 
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon (int side, int metadata){
+    public IIcon getIcon (int side, int metadata) {
 
-        return side == 1 ? this.iconTop : (side == 0 ? this.iconTop : (side !=metadata ? this.blockIcon : this.iconFront));
+        return metadata == 0 && side == 3 ? this.iconFront : side == 1 ? this.iconTop : (side == 0 ? this.iconTop : (side == metadata ? this.iconFront : this.blockIcon));
     }
 
-    public Item getItemDropped(World world, int x, int y, int z ){
+    public Item getItemDropped(int i, Random random, int j){
 
         return Item.getItemFromBlock(ModBlocks.duplicatorIdle);
 
     }
 
-    public void onBlockAdded(World world, int x, int y, int z){
-
-        super.onBlockAdded(world,x,y,z);
-        this.setDefaultDirection(world,x,y,z);
+    public void onBlockAdded(World world, int x, int y, int z) {
+        super.onBlockAdded(world, x, y, z);
+        this.setDefaultDirection(world, x, y, z);
     }
 
-    private void setDefaultDirection (World world, int x, int y, int z){
-
-        if (!world.isRemote) {
+    private void setDefaultDirection(World world, int x, int y, int z) {
+        if(!world.isRemote) {
             Block b1 = world.getBlock(x, y, z - 1);
             Block b2 = world.getBlock(x,  y,  z + 1);
             Block b3 = world.getBlock(x - 1, y, z);
@@ -108,16 +105,13 @@ public class BlockDuplicator extends BlockContainer {
             world.setBlockMetadataWithNotify(x, y, x, b0, 2);
         }
 
-
     }
 
-    public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ){
-
-        if (!world.isRemote){
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        if(!world.isRemote) {
             FMLNetworkHandler.openGui(player, RoboticAdventure.instance, ModBlocks.guiIDDuplicator, world, x, y, z);
         }
         return true;
-
     }
 
 
@@ -128,52 +122,47 @@ public class BlockDuplicator extends BlockContainer {
     }
 
 
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityplayer, ItemStack itemstack) {
+        int l = MathHelper.floor_double((double)(entityplayer.rotationYaw * 4.0F / 360.F) + 0.5D) & 3;
 
+        if(l == 0) {
+            world.setBlockMetadataWithNotify(x, y, z, 2, 2);
+        }
 
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemStack){
+        if(l == 1) {
+            world.setBlockMetadataWithNotify(x, y, z, 5, 2);
+        }
 
-       int l = MathHelper.floor_double((double)(entityPlayer.rotationYaw * 4.0F / 360.F) + 0.5D ) & 3;
+        if(l == 2) {
+            world.setBlockMetadataWithNotify(x, y, z, 3, 2);
+        }
 
-       if(l == 0) {
-           world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-       }
+        if(l == 3) {
+            world.setBlockMetadataWithNotify(x, y, z, 4, 2);
+        }
 
-       if(l == 1) {
-           world.setBlockMetadataWithNotify(x, y, z, 5, 2);
-       }
-
-       if(l == 2) {
-           world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-       }
-
-       if(l == 3) {
-           world.setBlockMetadataWithNotify(x, y, z, 4, 2);
-       }
-
-       if(itemStack.hasDisplayName()) {
-           ((TileEntityDuplicator)world.getTileEntity(x, y, z)).setGuiDisplayName(itemStack.getDisplayName());
-       }
-   }
+        if(itemstack.hasDisplayName()) {
+            ((TileEntityDuplicator)world.getTileEntity(x, y, z)).setGuiDisplayName(itemstack.getDisplayName());
+        }
+    }
 
     public static void updateDuplicatorBlockState(boolean active, World worldObj, int xCoord, int yCoord, int zCoord) {
-
         int i = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 
         TileEntity tileentity = worldObj.getTileEntity(xCoord, yCoord, zCoord);
         keepInventory = true;
 
-        if (active){
-            worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.duplicatorActive);
-        }
-        else{
-            worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.duplicatorIdle);
-
+        if(active) {
+            worldObj.setBlock(xCoord, yCoord, zCoord, ModBlocks.duplicatorActive);
+        }else{
+            worldObj.setBlock(xCoord, yCoord, zCoord, ModBlocks.duplicatorIdle);
         }
 
         keepInventory = false;
+
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, i, 2);
 
-        if(tileentity != null){
+        if(tileentity != null) {
             tileentity.validate();
             worldObj.setTileEntity(xCoord, yCoord, zCoord, tileentity);
         }

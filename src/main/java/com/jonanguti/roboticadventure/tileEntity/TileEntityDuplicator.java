@@ -37,7 +37,7 @@ public class TileEntityDuplicator extends TileEntity implements ISidedInventory{
     }
 
     public String getInventoryName() {
-        return this.hasCustomInventoryName() ? this.localizedName : "container.alabasterOven";
+        return this.hasCustomInventoryName() ? this.localizedName : "container.duplicator";
     }
 
     public boolean hasCustomInventoryName() {
@@ -254,5 +254,18 @@ public class TileEntityDuplicator extends TileEntity implements ISidedInventory{
     @Override
     public boolean canExtractItem(int i, ItemStack itemStack, int j) {
         return j !=0 || i != 1|| itemStack.getItem() == Items.bucket;
+    }
+
+    public int getBurntimeRemainingScaled (int i){
+
+        if (this.currentItemBurntime == 0){
+            this.currentItemBurntime = this.speed;
+        }
+        return this.burntime * i/ this.currentItemBurntime;
+    }
+
+    public int getCookProgressScaled(int i){
+        return this.cooktime * i / this.speed;
+
     }
 }

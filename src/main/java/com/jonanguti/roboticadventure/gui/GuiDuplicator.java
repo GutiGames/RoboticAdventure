@@ -3,14 +3,17 @@ package com.jonanguti.roboticadventure.gui;
 import com.jonanguti.roboticadventure.reference.Reference;
 import com.jonanguti.roboticadventure.tileEntity.TileEntityDuplicator;
 import com.jonanguti.roboticadventure.container.ContainerDuplicator;
+import jdk.nashorn.internal.objects.Global;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GuiDuplicator extends GuiContainer {
 
-    public static final ResourceLocation bgound = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiDuplicator.png" );
+    public static final ResourceLocation bgound = new ResourceLocation(Reference.MOD_ID + ":" + "textures/gui/GuiDuplicator.png" );
 
     public TileEntityDuplicator duplicator;
 
@@ -34,7 +37,11 @@ public class GuiDuplicator extends GuiContainer {
 
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+    protected void drawGuiContainerBackgroundLayer(float vae1, int var2, int var3) {
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+
+        Minecraft.getMinecraft().getTextureManager().bindTexture(bgound);
+        drawTexturedModalRect(guiLeft ,guiTop ,0,0, xSize, ySize);
 
     }
 
