@@ -43,6 +43,17 @@ public class GuiDuplicator extends GuiContainer {
         Minecraft.getMinecraft().getTextureManager().bindTexture(bgound);
         drawTexturedModalRect(guiLeft ,guiTop ,0,0, xSize, ySize);
 
+
+        if (this.duplicator.isBurning()){
+            int k = this.duplicator.getBurnTimeRemainingScaled(40);
+            int j = 40 - k;
+
+            drawTexturedModalRect(guiLeft + 29, guiTop + 65, 176, 0, 40 - j, 10);
+        }
+
+        int k = this.duplicator.getCookProgressScaled(24);
+        drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 10, k + 1, 16);
+
     }
 
 }

@@ -1,7 +1,5 @@
 package com.jonanguti.roboticadventure;
 
-import com.jonanguti.roboticadventure.CloneCardRecipes.CCRecipes;
-import com.jonanguti.roboticadventure.handler.CCRecipeHandler;
 import com.jonanguti.roboticadventure.handler.GuiHandler;
 import com.jonanguti.roboticadventure.init.ModBlocks;
 import com.jonanguti.roboticadventure.init.ModItems;
@@ -45,14 +43,10 @@ public class RoboticAdventure {
     public void init(FMLInitializationEvent event){
 
         //FMLCommonHandler.instance().bus().register(new CraftingHandler());
-        FMLCommonHandler.instance().bus().register(new CCRecipeHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
         Recipes.init();
         LogHelper.info("Recipes loaded");
-
-        CCRecipes.init();
-        LogHelper.info("CCRecipes loaded");
 
         ModTileEntities.init();
         LogHelper.info("Tiles initialized");
